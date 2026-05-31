@@ -1,0 +1,2050 @@
+﻿<!doctype html>
+<html lang="lo">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>ລາຍຮັບ-ລາຍຈ່າຍ</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Noto+Sans+Lao:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          ui: ['"Plus Jakarta Sans"', '"Noto Sans Thai"', '"Noto Sans Lao"', 'system-ui', 'sans-serif'],
+          num: ['"Plus Jakarta Sans"', '"Noto Sans Thai"', '"Noto Sans Lao"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  :root {
+    /* Warm dark neutrals */
+    --bg-0: #0e0d0c;          /* page */
+    --bg-1: #181614;          /* card */
+    --bg-2: #221f1c;          /* card hover / inner */
+    --bg-3: #2c2926;          /* border subtle */
+    --line:  rgba(255,255,255,0.06);
+    --line-2: rgba(255,255,255,0.10);
+    --text-0: #f5f1ea;        /* primary text - warm white */
+    --text-1: #c9c2b6;        /* secondary */
+    --text-2: #877f73;        /* muted */
+    --text-3: #5a534a;        /* very muted */
+
+    --app-max: 440px;          /* mobile-app width on desktop */
+
+    /* Bucket accents — same chroma family, varying hue */
+    --save:    oklch(0.78 0.14 158);  /* emerald — savings & invest */
+    --save-bg: oklch(0.32 0.07 158 / 0.22);
+    --self:    oklch(0.82 0.13 78);   /* amber — personal */
+    --self-bg: oklch(0.32 0.07 78 / 0.22);
+    --fam:     oklch(0.78 0.14 12);   /* rose — family */
+    --fam-bg:  oklch(0.32 0.07 12 / 0.22);
+    --emerg:   oklch(0.78 0.13 235);  /* sky — emergency */
+    --emerg-bg: oklch(0.32 0.07 235 / 0.22);
+  }
+
+  html, body { background: #050504; color: var(--text-0); }
+  body { font-family: 'Plus Jakarta Sans', 'Noto Sans Thai', 'Noto Sans Lao', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+
+  /* App shell — phone-sized on desktop, full width on mobile */
+  .app-shell {
+    width: 100%;
+    max-width: var(--app-max);
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0 auto;
+    background: var(--bg-0);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (min-width: 600px) {
+    body { display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+    .app-shell {
+      height: calc(100vh - 48px);
+      max-height: 920px;
+      min-height: 680px;
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow:
+        0 30px 80px -20px rgba(0,0,0,0.6),
+        0 0 0 10px #18120c,
+        0 0 0 11px rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+  }
+
+  /* Lao-specific: when html lang=lo, prefer Noto Sans Lao */
+  html[lang="lo"] body { font-family: 'Noto Sans Lao', 'Plus Jakarta Sans', system-ui, sans-serif; }
+
+  /* tabular numbers for money */
+  .tnum { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 10px; border: 2px solid var(--bg-0); }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3631; }
+
+  /* number input cleanup */
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+
+  /* keyframes */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(46,164,107,0.0); } 50% { box-shadow: 0 0 0 8px rgba(46,164,107,0.0); } }
+
+  .anim-fadeUp { animation: fadeUp 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .anim-fadeIn { animation: fadeIn 0.5s ease both; }
+  .anim-scaleIn { animation: scaleIn 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+  /* the soft glow on totals */
+  .total-glow {
+    background: radial-gradient(80% 80% at 50% 0%, rgba(46,164,107,0.10), transparent 70%);
+  }
+
+  .card {
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  .card-inner {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(180deg, oklch(0.78 0.14 158), oklch(0.66 0.14 158));
+    color: #06231a;
+    font-weight: 700;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 10px 30px -10px oklch(0.66 0.14 158 / 0.55);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.15s ease;
+  }
+  .btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); filter: brightness(0.98); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-1);
+    border: 1px solid var(--line-2);
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-ghost:hover { background: var(--bg-2); color: var(--text-0); border-color: rgba(255,255,255,0.18); }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--text-1);
+    font-size: 12px;
+  }
+
+  /* select / input */
+  .field {
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    color: var(--text-0);
+    border-radius: 12px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .field:focus, .field:focus-within {
+    outline: none;
+    border-color: oklch(0.66 0.14 158);
+    background: var(--bg-2);
+  }
+  .field::placeholder { color: var(--text-3); }
+
+  /* segmented control */
+  .seg {
+    display: inline-flex; padding: 4px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    gap: 2px;
+  }
+  .seg button {
+    padding: 8px 14px;
+    border-radius: 9px;
+    color: var(--text-2);
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .seg button.on {
+    background: var(--bg-0);
+    color: var(--text-0);
+    box-shadow: 0 1px 0 var(--line-2);
+  }
+  .seg button:hover:not(.on) { color: var(--text-0); }
+
+  /* bucket bar growing animation */
+  .bar-grow {
+    transform-origin: left center;
+    animation: growX 0.9s cubic-bezier(0.22, 0.8, 0.25, 1) both;
+  }
+  @keyframes growX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .bucket-ring {
+    position: relative;
+  }
+  .bucket-ring::after {
+    content: ''; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 40%);
+    mix-blend-mode: overlay;
+  }
+
+  /* nav */
+  .navlink {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    color: var(--text-1);
+    transition: background 0.15s ease, color 0.15s ease;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .navlink:hover { background: var(--bg-2); color: var(--text-0); }
+  .navlink.active { background: var(--bg-2); color: var(--text-0); }
+  .navlink.active .dot { background: oklch(0.78 0.14 158); }
+  .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--text-3); }
+
+  /* mobile tab bar */
+  .tabbar {
+    background: rgba(14,13,12,0.88);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-top: 1px solid var(--line);
+  }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 9px 2px 6px;
+    color: var(--text-2);
+    font-size: 10.5px;
+    font-weight: 500;
+    transition: color 0.15s ease;
+    flex: 1;
+    min-height: 54px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab svg { width: 20px; height: 20px; }
+  .tab.active { color: var(--text-0); }
+  .tab.active svg { stroke: oklch(0.78 0.14 158); }
+  .tab:active { transform: scale(0.94); }
+
+  /* hide number arrows for currency input */
+  .big-amount {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: clamp(44px, 13vw, 64px);
+    letter-spacing: -0.025em;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-0);
+    width: 100%;
+    text-align: center;
+    min-width: 0;
+  }
+  .big-amount::placeholder { color: var(--text-3); font-weight: 500; }
+
+  /* subtle grid background pattern */
+  .bg-noise {
+    background-image:
+      radial-gradient(1200px 600px at 80% -10%, rgba(46,164,107,0.06), transparent 60%),
+      radial-gradient(1000px 500px at 0% 110%, rgba(220,170,80,0.05), transparent 60%);
+  }
+
+  /* details / summary cleanup */
+  details summary { list-style: none; cursor: pointer; }
+  details summary::-webkit-details-marker { display: none; }
+
+  /* checkbox-ish toggle */
+  .toggle {
+    width: 36px; height: 20px; border-radius: 999px; background: var(--bg-3); position: relative; transition: background 0.2s ease;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 999px;
+    background: var(--text-0); transition: transform 0.2s ease;
+  }
+  .toggle.on { background: oklch(0.66 0.14 158); }
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* empty state illustration shimmer */
+  .skel {
+    background: linear-gradient(90deg, var(--bg-2), var(--bg-3), var(--bg-2));
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+    border-radius: 8px;
+  }
+
+  /* small entrance for list items */
+  .list-enter {
+    animation: fadeUp 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* progress bar */
+  .prog-track { background: var(--bg-2); border-radius: 999px; overflow: hidden; height: 10px; border: 1px solid var(--line); }
+  .prog-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, oklch(0.78 0.14 158), oklch(0.85 0.13 158));
+    transition: width 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* dropdown */
+  .menu {
+    background: var(--bg-1);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.55);
+  }
+  .menuitem { padding: 8px 12px; cursor: pointer; color: var(--text-1); font-size: 14px; border-radius: 8px; margin: 2px; }
+  .menuitem:hover { background: var(--bg-2); color: var(--text-0); }
+
+  /* main content padding compensating mobile tab bar */
+  .pb-tabsafe { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+  /* scrollable main content area */
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .screen::-webkit-scrollbar { width: 0; }
+
+  /* sticky top header inside shell */
+  .app-header {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(14,13,12,0.85);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* tab bar absolute inside shell */
+  .tabbar-shell {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    z-index: 40;
+  }
+
+  /* bottom sheet */
+  .sheet-backdrop {
+    position: absolute; inset: 0; z-index: 50;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s ease both;
+  }
+  .sheet {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 51;
+    background: var(--bg-1);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-top: 1px solid var(--line-2);
+    padding: 8px 20px calc(24px + env(safe-area-inset-bottom));
+    max-height: 90%;
+    overflow-y: auto;
+    animation: sheetUp 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .sheet-handle {
+    width: 36px; height: 4px; border-radius: 99px;
+    background: var(--bg-3);
+    margin: 8px auto 16px;
+  }
+
+  /* fab */
+  .fab {
+    position: absolute; right: 20px; bottom: calc(96px + env(safe-area-inset-bottom));
+    width: 56px; height: 56px; border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, oklch(0.78 0.14 158), oklch(0.62 0.14 158));
+    color: #06231a;
+    box-shadow: 0 12px 30px -6px oklch(0.55 0.14 158 / 0.55), inset 0 1px 0 rgba(255,255,255,0.2);
+    z-index: 35;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .fab:active { transform: scale(0.94); filter: brightness(0.97); }
+
+  /* increase touch targets on mobile */
+  button, .navlink, .tab, .menuitem { -webkit-tap-highlight-color: transparent; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+/* ============================================================
+   i18n — Lao only
+   ============================================================ */
+const STRINGS = {
+  appName: 'ລາຍຮັບ-ລາຍຈ່າຍ',
+  appSubtitle: 'ບໍລິຫານເງິນສຳລັບລາຍຮັບບໍ່ສະໝ່ຳສະເໝີ',
+  nav: { home: 'ໜ້າຫຼັກ', history: 'ປະຫວັດ', expense: 'ລາຍຈ່າຍ', dashboard: 'ພາບລວມ', goals: 'ເປົ້າໝາຍ' },
+  home: {
+    welcome: 'ໄດ້ເງິນມາເທົ່າໃດມື້ນີ້?',
+    hint: 'ປ້ອນຈຳນວນເງິນທີ່ໄດ້ຮັບ ແລ້ວເຮົາຈະແບ່ງໃຫ້ອັດຕະໂນມັດ',
+    amount: 'ຈຳນວນເງິນ',
+    currency: 'ສະກຸນເງິນ',
+    note: 'ໝາຍເຫດ (ບໍ່ບັງຄັບ)',
+    notePlaceholder: 'ເຊັ່ນ ຄ່າຈ້າງ, ທິບ, ຂາຍເຄື່ອງ...',
+    date: 'ວັນທີ',
+    split: 'ແບ່ງເງິນ',
+    saveEntry: 'ບັນທຶກລາຍການ',
+    addAnother: 'ບັນທຶກອື່ນ',
+    goHistory: 'ເບິ່ງປະຫວັດ',
+    preview: 'ຕົວຢ່າງການແບ່ງ',
+    result: 'ຜົນການແບ່ງເງິນ',
+    total: 'ລວມ',
+    saved: 'ບັນທຶກແລ້ວ',
+  },
+  buckets: {
+    save: 'ອອມ + ລົງທຶນ',
+    saveDesc: 'ອະນາຄົດ ຄວາມໝັ້ນຄົງໄລຍະຍາວ',
+    self: 'ໃຊ້ຈ່າຍສ່ວນຕົວ',
+    selfDesc: 'ຊີວິດປະຈຳວັນ',
+    fam: 'ສົ່ງຄອບຄົວ',
+    famDesc: 'ດູແລຄົນທີ່ຮັກ',
+    emerg: 'ສຳຮອງສຸກເສີນ',
+    emergDesc: 'ເຜື່ອເຫດບໍ່ຄາດຄິດ',
+  },
+  history: {
+    title: 'ປະຫວັດລາຍຮັບ',
+    empty: 'ຍັງບໍ່ມີລາຍການ',
+    emptyHint: 'ເລີ່ມບັນທຶກລາຍຮັບຄັ້ງທຳອິດທີ່ໜ້າຫຼັກ',
+    thisMonth: 'ລາຍຮັບເດືອນນີ້',
+    count: 'ລາຍການ',
+    delete: 'ລຶບ',
+    confirm: 'ລຶບລາຍການນີ້?',
+    cancel: 'ຍົກເລີກ',
+    filter: { all: 'ທັງໝົດ', month: 'ເດືອນນີ້', year: 'ປີນີ້' },
+  },
+  expense: {
+    title: 'ລາຍຈ່າຍ',
+    add: 'ເພີ່ມລາຍຈ່າຍ',
+    newExpense: 'ລາຍຈ່າຍໃໝ່',
+    amount: 'ຈຳນວນເງິນ',
+    category: 'ໝວດໝູ່',
+    note: 'ໝາຍເຫດ',
+    notePlaceholder: 'ເຊັ່ນ ເຂົ້າສາຍ, ຄ່ານ້ຳມັນ...',
+    date: 'ວັນທີ',
+    save: 'ບັນທຶກ',
+    cancel: 'ຍົກເລີກ',
+    empty: 'ຍັງບໍ່ມີລາຍຈ່າຍ',
+    emptyHint: 'ກົດປຸ່ມ + ເພື່ອບັນທຶກລາຍຈ່າຍ',
+    thisMonth: 'ລາຍຈ່າຍເດືອນນີ້',
+    remaining: 'ຖັງໃຊ້ຈ່າຍສ່ວນຕົວຄົງເຫຼືອ',
+    spent: 'ໃຊ້ໄປແລ້ວ',
+    ofBudget: 'ຈາກງົບຖັງໃຊ້ຈ່າຍສ່ວນຕົວ',
+    byCategory: 'ແຍກຕາມໝວດ',
+    overBudget: 'ເກີນງົບປະມານ',
+    delete: 'ລຶບ',
+    categories: {
+      food: 'ອາຫານ',
+      transport: 'ການເດີນທາງ',
+      shopping: 'ຊື້ເຄື່ອງ',
+      housing: 'ທີ່ພັກ',
+      bills: 'ຄ່ານ້ຳ/ຄ່າໄຟ',
+      health: 'ສຸຂະພາບ',
+      fun: 'ບັນເທີງ',
+      edu: 'ການສຶກສາ',
+      family: 'ຄອບຄົວ',
+      other: 'ອື່ນໆ',
+    },
+  },
+  dash: {
+    title: 'ພາບລວມການເງິນ',
+    thisMonth: 'ລາຍຮັບເດືອນນີ້',
+    lastMonth: 'ເດືອນແລ້ວ',
+    avg6: 'ສະເລ່ຍ 6 ເດືອນ',
+    totalIncome: 'ລາຍຮັບລວມທັງໝົດ',
+    accumulated: 'ຍອດສະສົມແຕ່ລະຖັງ',
+    monthly: 'ລາຍຮັບລາຍເດືອນ',
+    networth: 'ມູນຄ່າສຸດທິ (Net Worth)',
+    portfolioLabel: 'ມູນຄ່າພອດລົງທຶນ',
+    portfolioHint: 'ປ້ອນປະມານການປັດຈຸບັນ ລວມໃນມູນຄ່າສຸດທິ',
+    networthHint: 'ຍອດສະສົມທຸກຖັງ + ພອດລົງທຶນ',
+    noData: 'ຍັງບໍ່ມີຂໍ້ມູນ',
+    months: ['ມ.ກ.','ກ.ພ.','ມີ.ນ.','ເມ.ສ.','ພ.ພ.','ມິ.ຖ.','ກ.ລ.','ສ.ຫ.','ກ.ຍ.','ຕ.ລ.','ພ.ຈ.','ທ.ວ.'],
+  },
+  goals: {
+    title: 'ເປົ້າໝາຍການເງິນ',
+    add: 'ເພີ່ມເປົ້າໝາຍ',
+    newGoal: 'ເປົ້າໝາຍໃໝ່',
+    name: 'ຊື່ເປົ້າໝາຍ',
+    namePlaceholder: 'ເຊັ່ນ ເງິນສຳຮອງສຸກເສີນ, ທຶນຫຼັງຮຽນຈົບ',
+    target: 'ຈຳນວນເງິນເປົ້າໝາຍ',
+    bucket: 'ດຶງຍອດສະສົມຈາກຖັງ',
+    bucketHint: 'ຈະຄຳນວນ % ໂດຍອັດຕະໂນມັດຈາກຖັງທີ່ເລືອກ',
+    current: 'ຈຳນວນປັດຈຸບັນ (ປ້ອນເອງ)',
+    manualMode: 'ປ້ອນເອງ',
+    autoMode: 'ອັດຕະໂນມັດຈາກຖັງ',
+    save: 'ບັນທຶກ',
+    remove: 'ລຶບ',
+    empty: 'ຍັງບໍ່ມີເປົ້າໝາຍ — ລອງຕັ້ງເປົ້າໝາຍທຳອິດຂອງທ່ານ',
+    progress: 'ຄວາມຄືບໜ້າ',
+    remaining: 'ເຫຼືອ',
+    done: '🎉 ເຖິງເປົ້າໝາຍແລ້ວ!',
+  },
+  common: {
+    currency: { LAK: '₭ ກີບ', THB: '฿ ບາດ', USD: '$ USD' },
+  },
+  months: ['ມັງກອນ','ກຸມພາ','ມີນາ','ເມສາ','ພຶດສະພາ','ມິຖຸນາ','ກໍລະກົດ','ສິງຫາ','ກັນຍາ','ຕຸລາ','ພະຈິກ','ທັນວາ'],
+};
+
+/* ============================================================
+   Bucket definitions
+   ============================================================ */
+const BUCKETS = [
+  { key: 'save',  pct: 60, color: 'var(--save)',  bg: 'var(--save-bg)',  hex: '#3fbf86' },
+  { key: 'self',  pct: 20, color: 'var(--self)',  bg: 'var(--self-bg)',  hex: '#e7b760' },
+  { key: 'fam',   pct: 10, color: 'var(--fam)',   bg: 'var(--fam-bg)',   hex: '#e07a89' },
+  { key: 'emerg', pct: 10, color: 'var(--emerg)', bg: 'var(--emerg-bg)', hex: '#6fb4ee' },
+];
+
+const CURRENCIES = {
+  LAK: { symbol: '₭', code: 'LAK', decimals: 0, locale: 'lo-LA' },
+  THB: { symbol: '฿', code: 'THB', decimals: 2, locale: 'th-TH' },
+  USD: { symbol: '$', code: 'USD', decimals: 2, locale: 'en-US' },
+};
+
+/* ============================================================
+   Expense categories — spans the same hue family as buckets
+   ============================================================ */
+const EXPENSE_CATEGORIES = [
+  { key: 'food',      icon: 'food',      color: 'oklch(0.78 0.14 35)'  },  // warm red-orange
+  { key: 'transport', icon: 'transport', color: 'oklch(0.78 0.13 235)' },  // sky
+  { key: 'shopping',  icon: 'shopping',  color: 'oklch(0.78 0.14 320)' },  // magenta
+  { key: 'housing',   icon: 'housing',   color: 'oklch(0.78 0.13 200)' },  // teal
+  { key: 'bills',     icon: 'bills',     color: 'oklch(0.82 0.13 78)'  },  // amber
+  { key: 'health',    icon: 'health',    color: 'oklch(0.78 0.14 12)'  },  // rose
+  { key: 'fun',       icon: 'fun',       color: 'oklch(0.78 0.14 290)' },  // violet
+  { key: 'edu',       icon: 'edu',       color: 'oklch(0.78 0.14 158)' },  // emerald
+  { key: 'family',    icon: 'family',    color: 'oklch(0.78 0.13 50)'  },  // peach
+  { key: 'other',     icon: 'other',     color: 'oklch(0.65 0.02 100)' },  // neutral
+];
+
+/* ============================================================
+   Storage hook
+   ============================================================ */
+function useLocal(key, initial) {
+  const [v, setV] = useState(() => {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw == null ? initial : JSON.parse(raw);
+    } catch { return initial; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem(key, JSON.stringify(v)); } catch {}
+  }, [key, v]);
+  return [v, setV];
+}
+
+/* ============================================================
+   Google Sheets sync — แก้ URL ด้านล่างนี้ครั้งเดียวแล้วใช้ได้เลย
+   ============================================================ */
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzlO5Vt5cyIVGsKuBgaowASq3nQPXJaedD8r6_xBSBvs2Uw7hJ2oslFpW63WlADihXKlA/exec';
+
+async function loadFromSheets(url) {
+  try {
+    const res = await fetch(url, { redirect: 'follow' });
+    if (!res.ok) return null;
+    return JSON.parse(await res.text());
+  } catch { return null; }
+}
+
+async function saveToSheets(url, data) {
+  // no-cors = fire-and-forget POST; data still reaches Apps Script
+  await fetch(url, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(data),
+  });
+}
+
+/* ============================================================
+   Formatters
+   ============================================================ */
+function fmt(amount, currency) {
+  const c = CURRENCIES[currency] || CURRENCIES.LAK;
+  if (amount == null || isNaN(amount)) return '0';
+  try {
+    return amount.toLocaleString(c.locale, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: c.decimals,
+    });
+  } catch {
+    return Math.round(amount).toString();
+  }
+}
+
+function fmtDate(iso, lang) {
+  try {
+    const d = new Date(iso);
+    const locale = lang === 'lo' ? 'lo-LA' : 'th-TH';
+    return d.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch { return iso; }
+}
+
+function monthKey(iso) {
+  const d = new Date(iso);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+
+/* Count-up animation hook */
+function useCountUp(target, duration = 900) {
+  const [val, setVal] = useState(0);
+  const startRef = useRef(null);
+  const fromRef = useRef(0);
+  useEffect(() => {
+    fromRef.current = val;
+    startRef.current = null;
+    let raf;
+    function step(t) {
+      if (!startRef.current) startRef.current = t;
+      const p = Math.min(1, (t - startRef.current) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(fromRef.current + (target - fromRef.current) * eased);
+      if (p < 1) raf = requestAnimationFrame(step);
+    }
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  // eslint-disable-next-line
+  }, [target]);
+  return val;
+}
+
+/* ============================================================
+   Icons (inline SVG)
+   ============================================================ */
+const I = {
+  home: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>,
+  history: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/></svg>,
+  dash: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>,
+  goal: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>,
+  plus: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}><path d="M12 5v14M5 12h14"/></svg>,
+  trash: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6 18 20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>,
+  check: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12.5 10 17 19 8"/></svg>,
+  spark: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>,
+  arrowUp: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>,
+  arrowDown: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M17 7 7 17"/><path d="M15 17H7V9"/></svg>,
+  globe: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>,
+  close: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" {...p}><path d="M6 6l12 12M18 6 6 18"/></svg>,
+  edit: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="m13 6 4 4"/></svg>,
+  gear: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
+  /* Tab icon for expense */
+  expense: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 7h18l-1.5 12a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>,
+  /* Category icons */
+  food:      (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M7 3v8a3 3 0 0 1-3 3v7"/><path d="M7 3v18"/><path d="M11 3v8a3 3 0 0 0 3 3"/><path d="M18 3c-1.5 2-2 4-2 6 0 2 1 3 2 3v9"/></svg>,
+  transport: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 14V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/><path d="M4 14h16v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3z"/><circle cx="7.5" cy="17" r="1.4"/><circle cx="16.5" cy="17" r="1.4"/><path d="M6 10h12"/></svg>,
+  shopping:  (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 8h14l-1 12a2 2 0 0 1-2 1.7H8a2 2 0 0 1-2-1.7L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>,
+  housing:   (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>,
+  bills:     (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>,
+  health:    (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg>,
+  fun:       (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M10 10v4l4-2-4-2z" fill="currentColor"/></svg>,
+  edu:       (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2 9 12 4l10 5-10 5L2 9z"/><path d="M6 11v4c0 1.5 3 3 6 3s6-1.5 6-3v-4"/><path d="M22 9v6"/></svg>,
+  family:    (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 21v-1a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1"/><path d="M14 21v-1a4 4 0 0 1 4-4"/></svg>,
+  other:     (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg>,
+};
+
+/* ============================================================
+   ROOT APP
+   ============================================================ */
+function App() {
+  const [tab, setTab] = useLocal('mb.tab', 'home');
+  const [entries, setEntries] = useLocal('mb.entries', []);
+  const [expenses, setExpenses] = useLocal('mb.expenses', []);
+  const [goals, setGoals] = useLocal('mb.goals', [
+    { id: 'g_seed_1', name: 'ເງິນສຳຮອງສຸກເສີນ', target: 600000, currency: 'LAK', mode: 'auto', bucket: 'emerg' },
+    { id: 'g_seed_2', name: 'ທຶນຫຼັງຮຽນຈົບ', target: 3000000, currency: 'LAK', mode: 'auto', bucket: 'save' },
+  ]);
+  const [portfolio, setPortfolio] = useLocal('mb.portfolio', { amount: 0, currency: 'LAK' });
+  const [defaultCurrency, setDefaultCurrency] = useLocal('mb.cur', 'LAK');
+  const lang = 'lo';
+  const [goalSheetOpen, setGoalSheetOpen] = useState(false);
+  const [expSheetOpen, setExpSheetOpen] = useState(false);
+  const [syncStatus, setSyncStatus] = useState('idle');
+
+  const initialized = useRef(false);
+  const saveReady   = useRef(false);
+
+  // ── โหลดจาก Sheets ครั้งแรก ──────────────────────────────────
+  useEffect(() => {
+    if (!SHEETS_URL) { saveReady.current = true; return; }
+    if (initialized.current) return;
+    initialized.current = true;
+    setSyncStatus('syncing');
+    loadFromSheets(SHEETS_URL).then(data => {
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        if (data.cur)       setDefaultCurrency(data.cur);
+        if (data.entries)   setEntries(data.entries);
+        if (data.expenses)  setExpenses(data.expenses);
+        if (data.goals)     setGoals(data.goals);
+        if (data.portfolio) setPortfolio(data.portfolio);
+        setSyncStatus('ok');
+      } else {
+        setSyncStatus('error');
+      }
+      saveReady.current = true;
+    }).catch(() => { setSyncStatus('error'); saveReady.current = true; });
+  }, []); // eslint-disable-line
+
+  // ── บันทึกไป Sheets เมื่อข้อมูลเปลี่ยน (debounce 1.5s) ───────
+  useEffect(() => {
+    if (!SHEETS_URL || !saveReady.current) return;
+    setSyncStatus('syncing');
+    const t = setTimeout(() => {
+      saveToSheets(SHEETS_URL, { entries, expenses, goals, portfolio, cur: defaultCurrency })
+        .then(() => setSyncStatus('ok'));
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [entries, expenses, goals, portfolio, defaultCurrency]);
+
+  const t = STRINGS;
+
+  // Bucket totals across all entries (accumulated)
+  const bucketTotals = useMemo(() => {
+    const totals = { save: 0, self: 0, fam: 0, emerg: 0 };
+    for (const e of entries) {
+      // for simplicity, only sum entries in default currency
+      if (e.currency !== defaultCurrency) continue;
+      for (const b of BUCKETS) {
+        totals[b.key] += e.amount * (b.pct / 100);
+      }
+    }
+    return totals;
+  }, [entries, defaultCurrency]);
+
+  const totalSaved = useMemo(
+    () => Object.values(bucketTotals).reduce((a, b) => a + b, 0),
+    [bucketTotals]
+  );
+
+  // monthly buckets
+  const monthlyTotals = useMemo(() => {
+    const m = {};
+    for (const e of entries) {
+      if (e.currency !== defaultCurrency) continue;
+      const k = monthKey(e.date);
+      m[k] = (m[k] || 0) + e.amount;
+    }
+    return m;
+  }, [entries, defaultCurrency]);
+
+  const handleAddEntry = useCallback((entry) => {
+    setEntries(prev => [{ ...entry, id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6) }, ...prev]);
+  }, [setEntries]);
+
+  const handleDeleteEntry = useCallback((id) => {
+    setEntries(prev => prev.filter(e => e.id !== id));
+  }, [setEntries]);
+
+  const handleAddExpense = useCallback((exp) => {
+    setExpenses(prev => [{ ...exp, id: 'x_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6) }, ...prev]);
+  }, [setExpenses]);
+
+  const handleDeleteExpense = useCallback((id) => {
+    setExpenses(prev => prev.filter(e => e.id !== id));
+  }, [setExpenses]);
+
+  return (
+    <div className="app-shell bg-noise">
+      {/* Sticky top bar */}
+      <header className="app-header px-5 pt-4 pb-3 flex items-center justify-between gap-3" style={{paddingTop: 'calc(16px + env(safe-area-inset-top))'}}>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{
+            background: 'linear-gradient(135deg, oklch(0.78 0.14 158), oklch(0.55 0.14 158))',
+            boxShadow: '0 6px 14px -4px oklch(0.55 0.14 158 / 0.5), inset 0 1px 0 rgba(255,255,255,0.18)',
+          }}>
+            <span style={{color:'#06231a', fontWeight:800, fontSize:16, letterSpacing:'-0.02em'}}>฿</span>
+          </div>
+          <div>
+            <div className="text-[14px] font-semibold tracking-tight leading-tight">{t.appName}</div>
+            <div className="text-[10.5px] leading-tight" style={{color:'var(--text-2)'}}>{t.appSubtitle}</div>
+          </div>
+        </div>
+
+        {SHEETS_URL && (
+          <div
+            className="w-2 h-2 rounded-full shrink-0 transition-colors duration-500"
+            style={{ background: { idle:'var(--text-3)', syncing:'#f0c040', ok:'#4ade80', error:'#f87171' }[syncStatus] }}
+            title={syncStatus}
+          />
+        )}
+      </header>
+
+      {/* Scrollable screen */}
+      <main className="screen px-4 pt-4 pb-tabsafe">
+        {tab === 'home' && (
+          <HomeScreen
+            t={t}
+            lang={lang}
+            defaultCurrency={defaultCurrency}
+            setDefaultCurrency={setDefaultCurrency}
+            onAdd={handleAddEntry}
+            setTab={setTab}
+          />
+        )}
+        {tab === 'history' && (
+          <HistoryScreen t={t} lang={lang} entries={entries} onDelete={handleDeleteEntry} defaultCurrency={defaultCurrency}/>
+        )}
+        {tab === 'expense' && (
+          <ExpensesScreen
+            t={t} lang={lang}
+            expenses={expenses}
+            onDelete={handleDeleteExpense}
+            bucketTotals={bucketTotals}
+            defaultCurrency={defaultCurrency}
+            onOpenSheet={() => setExpSheetOpen(true)}
+          />
+        )}
+        {tab === 'dashboard' && (
+          <DashboardScreen
+            t={t} lang={lang}
+            entries={entries}
+            bucketTotals={bucketTotals}
+            totalSaved={totalSaved}
+            monthlyTotals={monthlyTotals}
+            defaultCurrency={defaultCurrency}
+            portfolio={portfolio}
+            setPortfolio={setPortfolio}
+          />
+        )}
+        {tab === 'goals' && (
+          <GoalsScreen
+            t={t} lang={lang}
+            goals={goals}
+            setGoals={setGoals}
+            bucketTotals={bucketTotals}
+            defaultCurrency={defaultCurrency}
+            onOpenSheet={() => setGoalSheetOpen(true)}
+          />
+        )}
+      </main>
+
+      {/* FAB for adding goals — visible on goals tab */}
+      {tab === 'goals' && !goalSheetOpen && (
+        <button onClick={() => setGoalSheetOpen(true)} className="fab anim-scaleIn" aria-label={t.goals.add}>
+          <I.plus width="22" height="22"/>
+        </button>
+      )}
+
+      {/* FAB for adding expenses — visible on expense tab */}
+      {tab === 'expense' && !expSheetOpen && (
+        <button onClick={() => setExpSheetOpen(true)} className="fab anim-scaleIn" aria-label={t.expense.add}>
+          <I.plus width="22" height="22"/>
+        </button>
+      )}
+
+      {/* Expense bottom sheet */}
+      {expSheetOpen && (
+        <ExpenseSheet
+          t={t}
+          defaultCurrency={defaultCurrency}
+          onClose={() => setExpSheetOpen(false)}
+          onAdd={(x) => { handleAddExpense(x); setExpSheetOpen(false); }}
+        />
+      )}
+
+      {/* Goal bottom sheet */}
+      {goalSheetOpen && (
+        <GoalSheet
+          t={t}
+          defaultCurrency={defaultCurrency}
+          onClose={() => setGoalSheetOpen(false)}
+          onAdd={(g) => { setGoals(prev => [g, ...prev]); setGoalSheetOpen(false); }}
+        />
+      )}
+
+
+
+      {/* Bottom tab bar (always visible, inside shell) */}
+      <nav className="tabbar tabbar-shell flex items-center px-1" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
+        <button onClick={() => setTab('home')} className={'tab ' + (tab==='home'?'active':'')}>
+          <I.home width="22" height="22"/><span>{t.nav.home}</span>
+        </button>
+        <button onClick={() => setTab('history')} className={'tab ' + (tab==='history'?'active':'')}>
+          <I.history width="22" height="22"/><span>{t.nav.history}</span>
+        </button>
+        <button onClick={() => setTab('expense')} className={'tab ' + (tab==='expense'?'active':'')}>
+          <I.expense width="22" height="22"/><span>{t.nav.expense}</span>
+        </button>
+        <button onClick={() => setTab('dashboard')} className={'tab ' + (tab==='dashboard'?'active':'')}>
+          <I.dash width="22" height="22"/><span>{t.nav.dashboard}</span>
+        </button>
+        <button onClick={() => setTab('goals')} className={'tab ' + (tab==='goals'?'active':'')}>
+          <I.goal width="22" height="22"/><span>{t.nav.goals}</span>
+        </button>
+      </nav>
+    </div>
+  );
+}
+
+function NavLink({ active, onClick, icon, label }) {
+  return (
+    <button onClick={onClick} className={'navlink w-full ' + (active?'active':'')}>
+      <span className="dot"/>
+      <span className="opacity-80">{icon}</span>
+      <span>{label}</span>
+    </button>
+  );
+}
+
+/* ============================================================
+   HOME SCREEN
+   ============================================================ */
+function HomeScreen({ t, lang, defaultCurrency, setDefaultCurrency, onAdd, setTab }) {
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState(defaultCurrency);
+  const [note, setNote] = useState('');
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [split, setSplit] = useState(null); // { amount, currency, ts } when shown
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => { setCurrency(defaultCurrency); }, [defaultCurrency]);
+
+  const numAmount = parseFloat(amount) || 0;
+
+  const doSplit = () => {
+    if (numAmount <= 0) return;
+    setSaved(false);
+    setSplit({ amount: numAmount, currency, ts: Date.now() });
+  };
+
+  const doSave = () => {
+    if (!split) return;
+    onAdd({
+      amount: split.amount,
+      currency: split.currency,
+      note: note.trim(),
+      date,
+    });
+    setSaved(true);
+    if (currency !== defaultCurrency) setDefaultCurrency(currency);
+  };
+
+  const doReset = () => {
+    setAmount(''); setNote(''); setSplit(null); setSaved(false);
+    setDate(new Date().toISOString().slice(0, 10));
+  };
+
+  return (
+    <div>
+      <section className="card p-5 pt-7 anim-fadeUp">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 pill mb-4">
+            <span style={{width:6,height:6,background:'var(--save)',borderRadius:99}}/>
+            60 / 20 / 10 / 10
+          </div>
+          <h1 className="text-[22px] font-semibold tracking-tight" style={{textWrap:'pretty'}}>
+            {t.home.welcome}
+          </h1>
+          <p className="text-[13px] mt-1.5 px-2" style={{color:'var(--text-2)'}}>
+            {t.home.hint}
+          </p>
+        </div>
+
+        {/* Big amount input */}
+        <div className="mt-6">
+          <div className="flex items-baseline justify-center gap-2">
+            <span className="text-2xl" style={{color:'var(--text-3)'}}>{CURRENCIES[currency].symbol}</span>
+            <input
+              type="text"
+              inputMode="decimal"
+              className="big-amount tnum"
+              placeholder="0"
+              value={amount}
+              onChange={(e) => {
+                const v = e.target.value.replace(/[^\d.]/g, '');
+                setAmount(v);
+                setSplit(null); setSaved(false);
+              }}
+              onKeyDown={(e) => { if (e.key === 'Enter') doSplit(); }}
+            />
+          </div>
+
+          {/* Currency segmented */}
+          <div className="flex justify-center mt-4">
+            <div className="seg">
+              {Object.keys(CURRENCIES).map(c => (
+                <button key={c} onClick={() => { setCurrency(c); setSplit(null); setSaved(false); }} className={currency===c?'on':''}>
+                  {t.common.currency[c]}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* date + note */}
+        <div className="grid grid-cols-1 gap-3 mt-6">
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.home.date}</label>
+            <input
+              type="date"
+              className="field px-3.5 py-3 w-full text-[14px]"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              max={new Date().toISOString().slice(0,10)}
+              style={{colorScheme:'dark'}}
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.home.note}</label>
+            <input
+              type="text"
+              className="field px-3.5 py-3 w-full text-[14px]"
+              placeholder={t.home.notePlaceholder}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              maxLength={80}
+            />
+          </div>
+        </div>
+
+        {/* Split button */}
+        <div className="mt-6">
+          <button
+            onClick={doSplit}
+            disabled={numAmount <= 0}
+            className="btn-primary w-full py-3.5 rounded-2xl text-[15px] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            <I.spark width="16" height="16"/>
+            {t.home.split}
+          </button>
+        </div>
+      </section>
+
+      {/* Result */}
+      {split && (
+        <section className="mt-4 card p-5 total-glow anim-fadeUp" key={split.ts}>
+          <div>
+            <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>{t.home.result}</div>
+            <div className="text-2xl font-semibold mt-1 tnum">
+              <CountText value={split.amount} currency={split.currency} />
+            </div>
+          </div>
+
+          <SplitBars amount={split.amount} currency={split.currency} t={t} key={split.ts+'-bars'} />
+
+          <div className="mt-5">
+            {!saved ? (
+              <div className="flex items-center gap-2">
+                <button className="btn-ghost flex-1 py-3 rounded-xl text-[14px]" onClick={doReset}>{t.history.cancel}</button>
+                <button className="btn-primary flex-1 py-3 rounded-xl text-[14px] flex items-center justify-center gap-2" onClick={doSave}>
+                  <I.check width="16" height="16"/>
+                  {t.home.saveEntry}
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <div className="pill self-center" style={{color:'var(--save)', borderColor:'rgba(63,191,134,0.3)'}}>
+                  <I.check width="12" height="12"/> {t.home.saved}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button className="btn-ghost flex-1 py-3 rounded-xl text-[14px]" onClick={doReset}>{t.home.addAnother}</button>
+                  <button className="btn-ghost flex-1 py-3 rounded-xl text-[14px]" onClick={() => setTab('history')}>{t.home.goHistory}</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function CountText({ value, currency }) {
+  const v = useCountUp(value, 800);
+  return <>{CURRENCIES[currency].symbol} {fmt(v, currency)}</>;
+}
+
+/* Bar chart for split */
+function SplitBars({ amount, currency, t }) {
+  const items = BUCKETS.map((b, i) => ({
+    ...b,
+    label: t.buckets[b.key],
+    desc: t.buckets[b.key+'Desc'],
+    value: amount * (b.pct / 100),
+    delay: 80 + i * 100,
+  }));
+  const max = Math.max(...items.map(i => i.value));
+
+  return (
+    <div className="mt-5 grid grid-cols-1 gap-3">
+      {items.map((it, i) => (
+        <div key={it.key} className="anim-fadeUp" style={{animationDelay: it.delay+'ms'}}>
+          <div className="flex items-baseline justify-between mb-1.5 gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="rounded-full shrink-0" style={{width:8,height:8,background:it.color}}/>
+              <span className="text-[13px] font-semibold truncate">{it.label}</span>
+              <span className="text-[10px] tnum shrink-0" style={{color:'var(--text-2)'}}>{it.pct}%</span>
+            </div>
+            <div className="tnum text-[13px] font-semibold shrink-0">
+              <CountText value={it.value} currency={currency}/>
+            </div>
+          </div>
+
+          <div className="relative h-7 rounded-lg overflow-hidden bucket-ring" style={{background:'var(--bg-2)', border:'1px solid var(--line)'}}>
+            <div
+              className="absolute inset-y-0 left-0 bar-grow"
+              style={{
+                width: (it.value / max * 100) + '%',
+                background: `linear-gradient(90deg, ${it.color}, ${it.color} 70%, transparent)`,
+                opacity: 0.85,
+                animationDelay: it.delay+'ms',
+              }}
+            />
+          </div>
+          <div className="text-[10.5px] mt-1" style={{color:'var(--text-3)'}}>{it.desc}</div>
+        </div>
+      ))}
+
+      {/* mini summary distribution bar */}
+      <div className="mt-2">
+        <div className="text-[10px] uppercase tracking-wider mb-2" style={{color:'var(--text-3)'}}>{t.home.total}</div>
+        <div className="flex h-2 rounded-full overflow-hidden anim-fadeIn" style={{animationDelay:'500ms'}}>
+          {items.map((it, i) => (
+            <div key={i} className="bar-grow" style={{
+              flex: it.pct,
+              background: it.color,
+              animationDelay: (500 + i*80) + 'ms',
+            }}/>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   HISTORY SCREEN
+   ============================================================ */
+function HistoryScreen({ t, lang, entries, onDelete, defaultCurrency }) {
+  const [filter, setFilter] = useState('all');
+  const [confirmId, setConfirmId] = useState(null);
+
+  const now = new Date();
+  const curMonthKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  const curYear = now.getFullYear();
+
+  const filtered = useMemo(() => {
+    return entries.filter(e => {
+      if (filter === 'all') return true;
+      if (filter === 'month') return monthKey(e.date) === curMonthKey;
+      if (filter === 'year') return new Date(e.date).getFullYear() === curYear;
+      return true;
+    });
+  }, [entries, filter, curMonthKey, curYear]);
+
+  // group by month
+  const groups = useMemo(() => {
+    const g = {};
+    for (const e of filtered) {
+      const k = monthKey(e.date);
+      if (!g[k]) g[k] = { key: k, items: [], total: {} };
+      g[k].items.push(e);
+      g[k].total[e.currency] = (g[k].total[e.currency] || 0) + e.amount;
+    }
+    return Object.values(g).sort((a, b) => b.key.localeCompare(a.key));
+  }, [filtered]);
+
+  // this month summary
+  const monthEntries = entries.filter(e => monthKey(e.date) === curMonthKey);
+  const monthTotals = monthEntries.reduce((acc, e) => {
+    acc[e.currency] = (acc[e.currency] || 0) + e.amount;
+    return acc;
+  }, {});
+
+  return (
+    <div>
+      <div className="anim-fadeUp">
+        <h2 className="text-xl font-semibold tracking-tight">{t.history.title}</h2>
+      </div>
+
+      {/* This month summary */}
+      <section className="card p-5 mt-3 anim-fadeUp" style={{animationDelay:'80ms'}}>
+        <div className="flex items-baseline justify-between gap-3 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>
+              {t.history.thisMonth} · {t.months[now.getMonth()]}
+            </div>
+            <div className="mt-2 space-y-1">
+              {Object.keys(monthTotals).length === 0 ? (
+                <div className="text-2xl font-semibold tnum" style={{color:'var(--text-3)'}}>—</div>
+              ) : (
+                Object.entries(monthTotals).map(([cur, total]) => (
+                  <div key={cur} className="text-2xl font-semibold tnum">
+                    {CURRENCIES[cur].symbol} {fmt(total, cur)}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+          <div className="pill">
+            {monthEntries.length} {t.history.count}
+          </div>
+        </div>
+      </section>
+
+      {/* Filter */}
+      <div className="mt-4 anim-fadeUp" style={{animationDelay:'150ms'}}>
+        <div className="seg w-full" style={{display:'flex'}}>
+          <button onClick={() => setFilter('all')} className={'flex-1 ' + (filter==='all'?'on':'')}>{t.history.filter.all}</button>
+          <button onClick={() => setFilter('month')} className={'flex-1 ' + (filter==='month'?'on':'')}>{t.history.filter.month}</button>
+          <button onClick={() => setFilter('year')} className={'flex-1 ' + (filter==='year'?'on':'')}>{t.history.filter.year}</button>
+        </div>
+      </div>
+
+      {/* List */}
+      <div className="mt-4 space-y-4">
+        {groups.length === 0 ? (
+          <EmptyState
+            title={t.history.empty}
+            hint={t.history.emptyHint}
+          />
+        ) : groups.map((g, gi) => {
+          const [y, m] = g.key.split('-').map(Number);
+          return (
+            <section key={g.key} className="anim-fadeUp" style={{animationDelay: (200 + gi*60)+'ms'}}>
+              <div className="flex items-baseline justify-between mb-2 px-1">
+                <div className="text-[12px] font-medium" style={{color:'var(--text-1)'}}>
+                  {t.months[m-1]} {y}
+                </div>
+                <div className="text-[11px] tnum" style={{color:'var(--text-2)'}}>
+                  {Object.entries(g.total).map(([cur, total]) => (
+                    <span key={cur} className="ml-3">
+                      {CURRENCIES[cur].symbol} {fmt(total, cur)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card overflow-hidden">
+                {g.items.map((e, i) => (
+                  <div key={e.id} className={'list-enter flex items-center justify-between gap-3 px-4 py-3 ' + (i>0?'border-t':'') } style={{borderColor:'var(--line)'}}>
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{
+                        background: 'var(--bg-2)', border: '1px solid var(--line)',
+                      }}>
+                        <I.arrowDown width="16" height="16" style={{color:'var(--save)'}}/>
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[14px] font-medium tnum">
+                          {CURRENCIES[e.currency].symbol} {fmt(e.amount, e.currency)}
+                        </div>
+                        <div className="text-[11.5px] truncate" style={{color:'var(--text-2)'}}>
+                          {fmtDate(e.date, lang)}
+                          {e.note ? ' · ' + e.note : ''}
+                        </div>
+                      </div>
+                    </div>
+
+                    {confirmId === e.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <button className="btn-ghost px-2.5 py-1.5 rounded-lg text-[12px]" onClick={() => setConfirmId(null)}>
+                          {t.history.cancel}
+                        </button>
+                        <button
+                          className="px-2.5 py-1.5 rounded-lg text-[12px] font-medium"
+                          style={{background:'oklch(0.6 0.18 25)', color:'#fff'}}
+                          onClick={() => { onDelete(e.id); setConfirmId(null); }}
+                        >
+                          {t.history.delete}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmId(e.id)}
+                        className="p-2 rounded-lg transition-colors"
+                        style={{color:'var(--text-2)'}}
+                        title={t.history.delete}
+                      >
+                        <I.trash width="16" height="16"/>
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({ title, hint }) {
+  return (
+    <div className="card p-10 text-center anim-fadeUp">
+      <div className="mx-auto w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{
+        background:'var(--bg-2)', border:'1px solid var(--line)',
+      }}>
+        <I.history width="22" height="22" style={{color:'var(--text-2)'}}/>
+      </div>
+      <div className="text-[16px] font-medium">{title}</div>
+      <div className="text-[13px] mt-1" style={{color:'var(--text-2)'}}>{hint}</div>
+    </div>
+  );
+}
+
+/* ============================================================
+   DASHBOARD SCREEN
+   ============================================================ */
+function DashboardScreen({ t, lang, entries, bucketTotals, totalSaved, monthlyTotals, defaultCurrency, portfolio, setPortfolio }) {
+  const now = new Date();
+  const curMonthKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+
+  // Last 6 months series
+  const series = useMemo(() => {
+    const arr = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+      arr.push({
+        key, month: d.getMonth(), year: d.getFullYear(),
+        label: t.dash.months[d.getMonth()],
+        value: monthlyTotals[key] || 0,
+      });
+    }
+    return arr;
+  }, [monthlyTotals, t]);
+
+  const lastMonthKey = (() => {
+    const d = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+  })();
+
+  const thisMonth = monthlyTotals[curMonthKey] || 0;
+  const lastMonth = monthlyTotals[lastMonthKey] || 0;
+  const avg6 = series.reduce((a, b) => a + b.value, 0) / 6;
+  const totalIncome = entries.filter(e => e.currency === defaultCurrency).reduce((a,b)=>a+b.amount, 0);
+
+  const networth = totalSaved + (portfolio.currency === defaultCurrency ? portfolio.amount : 0);
+
+  const mom = lastMonth > 0 ? ((thisMonth - lastMonth) / lastMonth) * 100 : null;
+
+  return (
+    <div>
+      <div className="anim-fadeUp">
+        <h2 className="text-xl font-semibold tracking-tight">{t.dash.title}</h2>
+      </div>
+
+      {/* Stat cards 2x2 */}
+      <div className="grid grid-cols-2 gap-2.5 mt-3">
+        <StatCard t={t} title={t.dash.thisMonth} value={thisMonth} cur={defaultCurrency} delta={mom} delay={80}/>
+        <StatCard t={t} title={t.dash.lastMonth} value={lastMonth} cur={defaultCurrency} delay={130}/>
+        <StatCard t={t} title={t.dash.avg6} value={avg6} cur={defaultCurrency} delay={180}/>
+        <StatCard t={t} title={t.dash.totalIncome} value={totalIncome} cur={defaultCurrency} delay={230}/>
+      </div>
+
+      {/* Net Worth */}
+      <section className="card p-5 mt-4 anim-fadeUp" style={{animationDelay:'280ms'}}>
+        <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>{t.dash.networth}</div>
+        <div className="text-3xl font-semibold mt-2 tnum">
+          {CURRENCIES[defaultCurrency].symbol} {fmt(networth, defaultCurrency)}
+        </div>
+        <div className="text-[11px] mt-1" style={{color:'var(--text-2)'}}>
+          {t.dash.networthHint}
+        </div>
+
+        <div className="mt-4 card-inner p-3.5">
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-[12px]" style={{color:'var(--text-2)'}}>{t.dash.portfolioLabel}</div>
+            <I.edit width="13" height="13" style={{color:'var(--text-3)'}}/>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="tnum" style={{color:'var(--text-3)'}}>{CURRENCIES[defaultCurrency].symbol}</span>
+            <input
+              type="text"
+              inputMode="decimal"
+              className="bg-transparent border-0 outline-none text-xl font-semibold tnum w-full"
+              placeholder="0"
+              value={portfolio.amount || ''}
+              onChange={(e) => {
+                const v = e.target.value.replace(/[^\d.]/g,'');
+                setPortfolio({ amount: parseFloat(v) || 0, currency: defaultCurrency });
+              }}
+            />
+          </div>
+          <div className="text-[10.5px] mt-1" style={{color:'var(--text-3)'}}>{t.dash.portfolioHint}</div>
+        </div>
+      </section>
+
+      {/* Monthly chart */}
+      <section className="card p-5 mt-4 anim-fadeUp" style={{animationDelay:'320ms'}}>
+        <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>{t.dash.monthly}</div>
+        <div className="text-[12px] mt-1" style={{color:'var(--text-2)'}}>
+          {CURRENCIES[defaultCurrency].symbol} {fmt(avg6, defaultCurrency)} · {t.dash.avg6}
+        </div>
+        <MonthlyChart series={series} cur={defaultCurrency} t={t}/>
+      </section>
+
+      {/* Bucket accumulated */}
+      <section className="card p-5 mt-4 anim-fadeUp" style={{animationDelay:'380ms'}}>
+        <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>{t.dash.accumulated}</div>
+        <div className="text-[12px] mt-1" style={{color:'var(--text-2)'}}>
+          {t.home.total} {CURRENCIES[defaultCurrency].symbol} {fmt(totalSaved, defaultCurrency)}
+        </div>
+
+        <div className="grid grid-cols-1 gap-2.5 mt-4">
+          {BUCKETS.map((b, i) => {
+            const v = bucketTotals[b.key];
+            const max = Math.max(...Object.values(bucketTotals), 1);
+            const pctOfMax = Math.min(100, (v / max) * 100);
+            return (
+              <div key={b.key} className="card-inner p-3.5 anim-fadeUp" style={{animationDelay: (430 + i*60)+'ms'}}>
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="rounded-full shrink-0" style={{width:8,height:8,background:b.color}}/>
+                    <span className="text-[13px] font-medium truncate">{t.buckets[b.key]}</span>
+                  </div>
+                  <span className="text-[10.5px] tnum shrink-0" style={{color:'var(--text-3)'}}>{b.pct}%</span>
+                </div>
+                <div className="text-[18px] font-semibold tnum">
+                  {CURRENCIES[defaultCurrency].symbol} {fmt(v, defaultCurrency)}
+                </div>
+                <div className="prog-track mt-2.5" style={{background:'var(--bg-1)', height: 6}}>
+                  <div className="h-full rounded-full transition-all duration-700" style={{
+                    width: pctOfMax+'%',
+                    background: `linear-gradient(90deg, ${b.color}, ${b.color})`,
+                    opacity: 0.85,
+                  }}/>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function StatCard({ t, title, value, cur, delta, delay }) {
+  return (
+    <div className="card p-3.5 anim-fadeUp" style={{animationDelay: delay+'ms'}}>
+      <div className="text-[10px] uppercase tracking-wider truncate" style={{color:'var(--text-3)'}}>{title}</div>
+      <div className="text-[17px] font-semibold mt-1.5 tnum truncate">
+        {CURRENCIES[cur].symbol} {fmt(value, cur)}
+      </div>
+      {delta != null && (
+        <div className="text-[10.5px] mt-0.5 tnum flex items-center gap-1" style={{color: delta >= 0 ? 'var(--save)' : '#e07a89'}}>
+          {delta >= 0 ? <I.arrowUp width="11" height="11"/> : <I.arrowDown width="11" height="11"/>}
+          {Math.abs(delta).toFixed(0)}%
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MonthlyChart({ series, cur, t }) {
+  const max = Math.max(...series.map(s => s.value), 1);
+  const hasData = series.some(s => s.value > 0);
+  const [activeIdx, setActiveIdx] = useState(null);
+  const active = activeIdx != null ? series[activeIdx] : null;
+
+  return (
+    <div className="mt-3">
+      {!hasData ? (
+        <div className="h-40 flex items-center justify-center text-[13px]" style={{color:'var(--text-3)'}}>
+          {t.dash.noData}
+        </div>
+      ) : (
+        <>
+          <div className="h-5 text-[11px] tnum" style={{color: active ? 'var(--text-1)' : 'var(--text-3)'}}>
+            {active ? `${CURRENCIES[cur].symbol} ${fmt(active.value, cur)} · ${active.label}` : ' '}
+          </div>
+          <div className="flex items-end gap-1.5 h-40 mt-1">
+            {series.map((s, i) => {
+              const h = max > 0 ? (s.value / max) * 100 : 0;
+              return (
+                <button
+                  key={s.key}
+                  onClick={() => setActiveIdx(activeIdx === i ? null : i)}
+                  className="flex-1 flex flex-col items-center justify-end gap-1.5 h-full -mx-0.5 px-0.5"
+                >
+                  <div className="w-full relative flex-1">
+                    <div className="absolute bottom-0 left-0 right-0 rounded-md transition-all duration-300" style={{
+                      height: Math.max(h, s.value > 0 ? 4 : 0) + '%',
+                      background: activeIdx === i
+                        ? 'linear-gradient(180deg, oklch(0.85 0.13 158), oklch(0.62 0.14 158))'
+                        : 'linear-gradient(180deg, oklch(0.78 0.14 158), oklch(0.5 0.13 158))',
+                      transformOrigin: 'bottom',
+                      animation: 'growY 0.6s cubic-bezier(0.2,0.7,0.2,1) both',
+                      animationDelay: (i*60 + 150)+'ms',
+                      opacity: activeIdx == null || activeIdx === i ? 1 : 0.5,
+                    }}/>
+                  </div>
+                  <div className="text-[10px]" style={{color: activeIdx === i ? 'var(--text-0)' : 'var(--text-2)'}}>{s.label}</div>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+      <style>{`@keyframes growY { from { transform: scaleY(0); } to { transform: scaleY(1); } }`}</style>
+    </div>
+  );
+}
+
+/* ============================================================
+   GOALS SCREEN
+   ============================================================ */
+function GoalsScreen({ t, lang, goals, setGoals, bucketTotals, defaultCurrency, onOpenSheet }) {
+  const removeGoal = (id) => {
+    setGoals(prev => prev.filter(g => g.id !== id));
+  };
+
+  const currentOf = (g) => {
+    if (g.mode === 'auto') return bucketTotals[g.bucket] || 0;
+    return g.current || 0;
+  };
+
+  return (
+    <div>
+      <div className="flex items-baseline justify-between anim-fadeUp">
+        <h2 className="text-xl font-semibold tracking-tight">{t.goals.title}</h2>
+        <button onClick={onOpenSheet} className="btn-ghost px-3 py-1.5 rounded-lg text-[13px] flex items-center gap-1">
+          <I.plus width="14" height="14"/> {t.goals.add}
+        </button>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {goals.length === 0 ? (
+          <EmptyState title={t.goals.empty} hint=""/>
+        ) : goals.map((g, i) => {
+          const cur = currentOf(g);
+          const pct = Math.min(100, g.target > 0 ? (cur / g.target) * 100 : 0);
+          const remain = Math.max(0, g.target - cur);
+          const done = pct >= 100;
+          const bucketColor = g.mode === 'auto' ? BUCKETS.find(b => b.key === g.bucket)?.color : 'oklch(0.78 0.14 158)';
+          return (
+            <section key={g.id} className="card p-5 anim-fadeUp" style={{animationDelay: (i*60)+'ms'}}>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="min-w-0">
+                  <div className="text-[15px] font-semibold truncate">{g.name}</div>
+                  <div className="text-[11.5px] mt-0.5" style={{color:'var(--text-2)'}}>
+                    {g.mode === 'auto' && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="rounded-full" style={{width:6,height:6,background:bucketColor}}/>
+                        {t.buckets[g.bucket]}
+                      </span>
+                    )}
+                    {g.mode === 'manual' && <span>{t.goals.manualMode}</span>}
+                  </div>
+                </div>
+                <button
+                  onClick={() => removeGoal(g.id)}
+                  className="p-2 rounded-lg btn-ghost shrink-0"
+                  title={t.goals.remove}
+                >
+                  <I.trash width="14" height="14"/>
+                </button>
+              </div>
+
+              <div className="flex items-baseline justify-between gap-2 mb-2 flex-wrap">
+                <div className="tnum text-[18px] font-semibold">
+                  {CURRENCIES[g.currency].symbol} {fmt(cur, g.currency)}
+                </div>
+                <div className="tnum text-[12px]" style={{color:'var(--text-2)'}}>
+                  / {CURRENCIES[g.currency].symbol} {fmt(g.target, g.currency)}
+                </div>
+              </div>
+
+              <div className="prog-track">
+                <div className="prog-fill" style={{
+                  width: pct + '%',
+                  background: `linear-gradient(90deg, ${bucketColor}, ${bucketColor})`,
+                  opacity: 0.9,
+                }}/>
+              </div>
+
+              <div className="flex items-baseline justify-between mt-2 text-[11.5px]">
+                <div className="tnum font-semibold" style={{color: done ? 'var(--save)' : 'var(--text-1)'}}>
+                  {pct.toFixed(1)}%
+                </div>
+                <div className="tnum" style={{color:'var(--text-2)'}}>
+                  {done ? t.goals.done : t.goals.remaining + ' ' + CURRENCIES[g.currency].symbol + ' ' + fmt(remain, g.currency)}
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* Bottom sheet for adding a goal */
+function GoalSheet({ t, defaultCurrency, onClose, onAdd }) {
+  const [form, setForm] = useState({ name: '', target: '', mode: 'auto', bucket: 'emerg', current: '', currency: defaultCurrency });
+
+  const submit = () => {
+    const target = parseFloat(form.target);
+    if (!form.name.trim() || !target || target <= 0) return;
+    onAdd({
+      id: 'g_' + Date.now(),
+      name: form.name.trim(),
+      target,
+      currency: form.currency,
+      mode: form.mode,
+      bucket: form.bucket,
+      current: parseFloat(form.current) || 0,
+    });
+  };
+
+  return (
+    <>
+      <div className="sheet-backdrop" onClick={onClose}/>
+      <div className="sheet" role="dialog" aria-modal="true">
+        <div className="sheet-handle"/>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[16px] font-semibold">{t.goals.newGoal}</div>
+          <button onClick={onClose} className="p-2 rounded-lg btn-ghost"><I.close width="16" height="16"/></button>
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.goals.name}</label>
+            <input
+              className="field px-3.5 py-3 w-full text-[14px]"
+              value={form.name}
+              onChange={(e) => setForm({...form, name: e.target.value})}
+              placeholder={t.goals.namePlaceholder}
+              maxLength={60}
+              autoFocus
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.goals.target}</label>
+            <div className="flex gap-2">
+              <input
+                className="field px-3.5 py-3 flex-1 text-[14px] tnum"
+                inputMode="decimal"
+                value={form.target}
+                onChange={(e) => setForm({...form, target: e.target.value.replace(/[^\d.]/g,'')})}
+                placeholder="0"
+              />
+              <select
+                className="field px-3 py-3 text-[14px]"
+                value={form.currency}
+                onChange={(e) => setForm({...form, currency: e.target.value})}
+                style={{colorScheme:'dark'}}
+              >
+                {Object.keys(CURRENCIES).map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.goals.bucket}</label>
+            <div className="seg w-full" style={{display:'flex'}}>
+              <button className={'flex-1 ' + (form.mode==='auto'?'on':'')} onClick={() => setForm({...form, mode:'auto'})}>{t.goals.autoMode}</button>
+              <button className={'flex-1 ' + (form.mode==='manual'?'on':'')} onClick={() => setForm({...form, mode:'manual'})}>{t.goals.manualMode}</button>
+            </div>
+          </div>
+
+          {form.mode === 'auto' ? (
+            <div>
+              <div className="grid grid-cols-2 gap-2">
+                {BUCKETS.map(b => (
+                  <button
+                    key={b.key}
+                    onClick={() => setForm({...form, bucket: b.key})}
+                    className="field px-3 py-3 text-[13px] text-left transition-all"
+                    style={form.bucket===b.key ? {borderColor: b.color} : {}}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="rounded-full shrink-0" style={{width:6,height:6,background:b.color}}/>
+                      <span className="truncate">{t.buckets[b.key]}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <div className="text-[10.5px] mt-1.5" style={{color:'var(--text-3)'}}>{t.goals.bucketHint}</div>
+            </div>
+          ) : (
+            <div>
+              <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.goals.current}</label>
+              <input
+                className="field px-3.5 py-3 w-full text-[14px] tnum"
+                inputMode="decimal"
+                value={form.current}
+                onChange={(e) => setForm({...form, current: e.target.value.replace(/[^\d.]/g,'')})}
+                placeholder="0"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-2 mt-5">
+          <button className="btn-ghost flex-1 py-3 rounded-xl text-[14px]" onClick={onClose}>{t.history.cancel}</button>
+          <button className="btn-primary flex-1 py-3 rounded-xl text-[14px]" onClick={submit}>{t.goals.save}</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ============================================================
+   EXPENSES SCREEN
+   ============================================================ */
+function ExpensesScreen({ t, lang, expenses, onDelete, bucketTotals, defaultCurrency, onOpenSheet }) {
+  const [confirmId, setConfirmId] = useState(null);
+  const now = new Date();
+  const curMonthKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+
+  // Expenses in default currency for this month
+  const monthExpenses = useMemo(
+    () => expenses.filter(e => e.currency === defaultCurrency && monthKey(e.date) === curMonthKey),
+    [expenses, defaultCurrency, curMonthKey]
+  );
+  const spentMonth = monthExpenses.reduce((a, b) => a + b.amount, 0);
+
+  // Available 'ใช้จ่ายส่วนตัว' bucket (lifetime allocated) minus total expenses
+  const totalSpent = expenses.filter(e => e.currency === defaultCurrency).reduce((a, b) => a + b.amount, 0);
+  const selfBucket = bucketTotals.self || 0;
+  const remaining = selfBucket - totalSpent;
+  const pctUsed = selfBucket > 0 ? Math.min(100, (totalSpent / selfBucket) * 100) : 0;
+  const isOver = totalSpent > selfBucket && selfBucket > 0;
+
+  // By category for this month
+  const byCategory = useMemo(() => {
+    const m = {};
+    for (const x of monthExpenses) {
+      m[x.category] = (m[x.category] || 0) + x.amount;
+    }
+    return Object.entries(m).sort((a, b) => b[1] - a[1]);
+  }, [monthExpenses]);
+
+  // Group expenses by date (descending), all currencies, all months
+  const groups = useMemo(() => {
+    const g = {};
+    for (const x of expenses) {
+      const k = x.date;
+      if (!g[k]) g[k] = { key: k, items: [] };
+      g[k].items.push(x);
+    }
+    return Object.values(g).sort((a, b) => b.key.localeCompare(a.key));
+  }, [expenses]);
+
+  return (
+    <div>
+      <div className="flex items-baseline justify-between anim-fadeUp">
+        <h2 className="text-xl font-semibold tracking-tight">{t.expense.title}</h2>
+        <button onClick={onOpenSheet} className="btn-ghost px-3 py-1.5 rounded-lg text-[13px] flex items-center gap-1">
+          <I.plus width="14" height="14"/> {t.expense.add}
+        </button>
+      </div>
+
+      {/* Budget summary card */}
+      <section className="card p-5 mt-3 anim-fadeUp" style={{animationDelay:'80ms'}}>
+        <div className="flex items-baseline justify-between gap-3 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>
+              {t.expense.thisMonth}
+            </div>
+            <div className="text-2xl font-semibold mt-1.5 tnum" style={{color: isOver ? '#e07a89' : 'var(--text-0)'}}>
+              {CURRENCIES[defaultCurrency].symbol} {fmt(spentMonth, defaultCurrency)}
+            </div>
+          </div>
+          <div className="pill">
+            {monthExpenses.length} {t.history.count}
+          </div>
+        </div>
+
+        {/* Self bucket budget vs spent (all-time) */}
+        {selfBucket > 0 && (
+          <div className="mt-4 card-inner p-3.5">
+            <div className="flex items-baseline justify-between mb-1.5 gap-2">
+              <div className="text-[12px] flex items-center gap-2 min-w-0">
+                <span className="rounded-full shrink-0" style={{width:6,height:6,background:'var(--self)'}}/>
+                <span style={{color:'var(--text-1)'}}>{t.buckets.self}</span>
+              </div>
+              <div className="text-[11px] tnum" style={{color:'var(--text-3)'}}>
+                {pctUsed.toFixed(0)}% {t.expense.ofBudget}
+              </div>
+            </div>
+            <div className="prog-track" style={{background:'var(--bg-1)', height: 8}}>
+              <div className="h-full rounded-full transition-all duration-700" style={{
+                width: pctUsed + '%',
+                background: isOver
+                  ? 'linear-gradient(90deg, #e07a89, #c45064)'
+                  : 'linear-gradient(90deg, oklch(0.82 0.13 78), oklch(0.7 0.14 60))',
+              }}/>
+            </div>
+            <div className="flex items-baseline justify-between mt-2.5 text-[11.5px]">
+              <div className="tnum" style={{color:'var(--text-2)'}}>
+                {t.expense.spent}: <span className="font-semibold" style={{color:'var(--text-0)'}}>{CURRENCIES[defaultCurrency].symbol} {fmt(totalSpent, defaultCurrency)}</span>
+              </div>
+              <div className="tnum" style={{color: isOver ? '#e07a89' : 'var(--save)'}}>
+                {isOver ? t.expense.overBudget : t.expense.remaining} {CURRENCIES[defaultCurrency].symbol} {fmt(Math.abs(remaining), defaultCurrency)}
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Category breakdown for this month */}
+      {byCategory.length > 0 && (
+        <section className="card p-5 mt-4 anim-fadeUp" style={{animationDelay:'150ms'}}>
+          <div className="text-[11px] uppercase tracking-wider" style={{color:'var(--text-3)'}}>{t.expense.byCategory}</div>
+          <div className="mt-3 space-y-2.5">
+            {byCategory.map(([catKey, val], i) => {
+              const cat = EXPENSE_CATEGORIES.find(c => c.key === catKey) || EXPENSE_CATEGORIES[EXPENSE_CATEGORIES.length-1];
+              const Icon = I[cat.icon] || I.other;
+              const pct = spentMonth > 0 ? (val / spentMonth) * 100 : 0;
+              return (
+                <div key={catKey} className="anim-fadeUp" style={{animationDelay: (200 + i*50) + 'ms'}}>
+                  <div className="flex items-center justify-between gap-3 mb-1">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{
+                        background: `color-mix(in oklch, ${cat.color} 18%, transparent)`,
+                        color: cat.color,
+                      }}>
+                        <Icon width="14" height="14"/>
+                      </div>
+                      <span className="text-[13px] font-medium truncate">{t.expense.categories[catKey] || catKey}</span>
+                      <span className="text-[10.5px] tnum shrink-0" style={{color:'var(--text-3)'}}>{pct.toFixed(0)}%</span>
+                    </div>
+                    <div className="tnum text-[13px] font-semibold shrink-0">
+                      {CURRENCIES[defaultCurrency].symbol} {fmt(val, defaultCurrency)}
+                    </div>
+                  </div>
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{background:'var(--bg-2)'}}>
+                    <div className="h-full bar-grow" style={{
+                      width: pct + '%',
+                      background: cat.color,
+                      opacity: 0.85,
+                      animationDelay: (200 + i*50) + 'ms',
+                    }}/>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* List */}
+      <div className="mt-4 space-y-4">
+        {groups.length === 0 ? (
+          <EmptyState title={t.expense.empty} hint={t.expense.emptyHint}/>
+        ) : groups.map((g, gi) => (
+          <section key={g.key} className="anim-fadeUp" style={{animationDelay: (200 + gi*50)+'ms'}}>
+            <div className="text-[11.5px] mb-2 px-1" style={{color:'var(--text-2)'}}>
+              {fmtDate(g.key, lang)}
+            </div>
+            <div className="card overflow-hidden">
+              {g.items.map((e, i) => {
+                const cat = EXPENSE_CATEGORIES.find(c => c.key === e.category) || EXPENSE_CATEGORIES[EXPENSE_CATEGORIES.length-1];
+                const Icon = I[cat.icon] || I.other;
+                return (
+                  <div key={e.id} className={'list-enter flex items-center justify-between gap-3 px-4 py-3 ' + (i>0?'border-t':'') } style={{borderColor:'var(--line)'}}>
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{
+                        background: `color-mix(in oklch, ${cat.color} 16%, var(--bg-2))`,
+                        color: cat.color,
+                        border: '1px solid var(--line)',
+                      }}>
+                        <Icon width="16" height="16"/>
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[14px] font-medium tnum" style={{color:'#e7a98a'}}>
+                          − {CURRENCIES[e.currency].symbol} {fmt(e.amount, e.currency)}
+                        </div>
+                        <div className="text-[11.5px] truncate" style={{color:'var(--text-2)'}}>
+                          {t.expense.categories[e.category] || e.category}
+                          {e.note ? ' · ' + e.note : ''}
+                        </div>
+                      </div>
+                    </div>
+                    {confirmId === e.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <button className="btn-ghost px-2.5 py-1.5 rounded-lg text-[12px]" onClick={() => setConfirmId(null)}>
+                          {t.history.cancel}
+                        </button>
+                        <button
+                          className="px-2.5 py-1.5 rounded-lg text-[12px] font-medium"
+                          style={{background:'oklch(0.6 0.18 25)', color:'#fff'}}
+                          onClick={() => { onDelete(e.id); setConfirmId(null); }}
+                        >
+                          {t.expense.delete}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmId(e.id)}
+                        className="p-2 rounded-lg transition-colors"
+                        style={{color:'var(--text-2)'}}
+                      >
+                        <I.trash width="16" height="16"/>
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Bottom sheet for adding an expense */
+function ExpenseSheet({ t, defaultCurrency, onClose, onAdd }) {
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState(defaultCurrency);
+  const [category, setCategory] = useState('food');
+  const [note, setNote] = useState('');
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+
+  const numAmount = parseFloat(amount) || 0;
+
+  const submit = () => {
+    if (numAmount <= 0) return;
+    onAdd({
+      amount: numAmount,
+      currency,
+      category,
+      note: note.trim(),
+      date,
+    });
+  };
+
+  return (
+    <>
+      <div className="sheet-backdrop" onClick={onClose}/>
+      <div className="sheet" role="dialog" aria-modal="true">
+        <div className="sheet-handle"/>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[16px] font-semibold">{t.expense.newExpense}</div>
+          <button onClick={onClose} className="p-2 rounded-lg btn-ghost"><I.close width="16" height="16"/></button>
+        </div>
+
+        {/* Big amount */}
+        <div className="flex items-baseline justify-center gap-2 py-2">
+          <span className="text-2xl" style={{color:'var(--text-3)'}}>{CURRENCIES[currency].symbol}</span>
+          <input
+            type="text"
+            inputMode="decimal"
+            className="big-amount tnum"
+            placeholder="0"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))}
+            autoFocus
+            style={{fontSize:'clamp(36px, 11vw, 52px)'}}
+          />
+        </div>
+
+        {/* Currency */}
+        <div className="flex justify-center mt-2">
+          <div className="seg">
+            {Object.keys(CURRENCIES).map(c => (
+              <button key={c} onClick={() => setCurrency(c)} className={currency===c?'on':''}>
+                {t.common.currency[c]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category grid */}
+        <div className="mt-5">
+          <label className="block text-[11px] mb-2" style={{color:'var(--text-2)'}}>{t.expense.category}</label>
+          <div className="grid grid-cols-5 gap-2">
+            {EXPENSE_CATEGORIES.map(c => {
+              const Icon = I[c.icon] || I.other;
+              const isActive = category === c.key;
+              return (
+                <button
+                  key={c.key}
+                  onClick={() => setCategory(c.key)}
+                  className="flex flex-col items-center gap-1 py-2 rounded-xl transition-all"
+                  style={{
+                    background: isActive ? `color-mix(in oklch, ${c.color} 16%, var(--bg-2))` : 'var(--bg-2)',
+                    border: '1px solid ' + (isActive ? c.color : 'var(--line)'),
+                  }}
+                >
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{color: c.color}}>
+                    <Icon width="16" height="16"/>
+                  </div>
+                  <span className="text-[9.5px] leading-tight text-center" style={{color: isActive ? 'var(--text-0)' : 'var(--text-2)'}}>
+                    {t.expense.categories[c.key]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Date + Note */}
+        <div className="grid grid-cols-1 gap-3 mt-4">
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.expense.date}</label>
+            <input
+              type="date"
+              className="field px-3.5 py-3 w-full text-[14px]"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              max={new Date().toISOString().slice(0,10)}
+              style={{colorScheme:'dark'}}
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] mb-1.5" style={{color:'var(--text-2)'}}>{t.expense.note}</label>
+            <input
+              type="text"
+              className="field px-3.5 py-3 w-full text-[14px]"
+              placeholder={t.expense.notePlaceholder}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              maxLength={80}
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2 mt-5">
+          <button className="btn-ghost flex-1 py-3 rounded-xl text-[14px]" onClick={onClose}>{t.expense.cancel}</button>
+          <button
+            className="btn-primary flex-1 py-3 rounded-xl text-[14px] disabled:opacity-40"
+            onClick={submit}
+            disabled={numAmount <= 0}
+          >
+            {t.expense.save}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ============================================================
+   Mount
+   ============================================================ */
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

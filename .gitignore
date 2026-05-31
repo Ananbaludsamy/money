@@ -1,0 +1,8 @@
+﻿node_modules/
+dist/
+.claude/
+src/
+package*.json
+vite.config.js
+tailwind.config.js
+postcss.config.js
