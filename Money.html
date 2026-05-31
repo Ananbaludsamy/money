@@ -562,6 +562,18 @@ function useLocal(key, initial) {
 }
 
 /* ============================================================
+   Number input helpers — comma formatting while typing
+   ============================================================ */
+function fmtNumInput(raw) {
+  const digits = String(raw).replace(/\D/g, '');
+  if (!digits) return '';
+  return Number(digits).toLocaleString('en-US');
+}
+function parseNumInput(str) {
+  return parseFloat(String(str).replace(/,/g, '')) || 0;
+}
+
+/* ============================================================
    Google Sheets sync — แก้ URL ด้านล่างนี้ครั้งเดียวแล้วใช้ได้เลย
    ============================================================ */
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzlO5Vt5cyIVGsKuBgaowASq3nQPXJaedD8r6_xBSBvs2Uw7hJ2oslFpW63WlADihXKlA/exec';
@@ -925,7 +937,7 @@ function HomeScreen({ t, lang, defaultCurrency, setDefaultCurrency, onAdd, setTa
 
   useEffect(() => { setCurrency(defaultCurrency); }, [defaultCurrency]);
 
-  const numAmount = parseFloat(amount) || 0;
+  const numAmount = parseNumInput(amount);
 
   const doSplit = () => {
     if (numAmount <= 0) return;
@@ -977,8 +989,7 @@ function HomeScreen({ t, lang, defaultCurrency, setDefaultCurrency, onAdd, setTa
               placeholder="0"
               value={amount}
               onChange={(e) => {
-                const v = e.target.value.replace(/[^\d.]/g, '');
-                setAmount(v);
+                setAmount(fmtNumInput(e.target.value));
                 setSplit(null); setSaved(false);
               }}
               onKeyDown={(e) => { if (e.key === 'Enter') doSplit(); }}
@@ -1601,8 +1612,8 @@ function GoalSheet({ t, defaultCurrency, onClose, onAdd }) {
   const [form, setForm] = useState({ name: '', target: '', mode: 'auto', bucket: 'emerg', current: '', currency: defaultCurrency });
 
   const submit = () => {
-    const target = parseFloat(form.target);
-    if (!form.name.trim() || !target || target <= 0) return;
+    const target = parseNumInput(form.target);
+    if (!form.name.trim() || target <= 0) return;
     onAdd({
       id: 'g_' + Date.now(),
       name: form.name.trim(),
@@ -1610,7 +1621,7 @@ function GoalSheet({ t, defaultCurrency, onClose, onAdd }) {
       currency: form.currency,
       mode: form.mode,
       bucket: form.bucket,
-      current: parseFloat(form.current) || 0,
+      current: parseNumInput(form.current),
     });
   };
 
@@ -1643,7 +1654,7 @@ function GoalSheet({ t, defaultCurrency, onClose, onAdd }) {
                 className="field px-3.5 py-3 flex-1 text-[14px] tnum"
                 inputMode="decimal"
                 value={form.target}
-                onChange={(e) => setForm({...form, target: e.target.value.replace(/[^\d.]/g,'')})}
+                onChange={(e) => setForm({...form, target: fmtNumInput(e.target.value)})}
                 placeholder="0"
               />
               <select
@@ -1691,7 +1702,7 @@ function GoalSheet({ t, defaultCurrency, onClose, onAdd }) {
                 className="field px-3.5 py-3 w-full text-[14px] tnum"
                 inputMode="decimal"
                 value={form.current}
-                onChange={(e) => setForm({...form, current: e.target.value.replace(/[^\d.]/g,'')})}
+                onChange={(e) => setForm({...form, current: fmtNumInput(e.target.value)})}
                 placeholder="0"
               />
             </div>
@@ -1921,7 +1932,7 @@ function ExpenseSheet({ t, defaultCurrency, onClose, onAdd }) {
   const [note, setNote] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
 
-  const numAmount = parseFloat(amount) || 0;
+  const numAmount = parseNumInput(amount);
 
   const submit = () => {
     if (numAmount <= 0) return;
@@ -1953,7 +1964,7 @@ function ExpenseSheet({ t, defaultCurrency, onClose, onAdd }) {
             className="big-amount tnum"
             placeholder="0"
             value={amount}
-            onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))}
+            onChange={(e) => setAmount(fmtNumInput(e.target.value))}
             autoFocus
             style={{fontSize:'clamp(36px, 11vw, 52px)'}}
           />
