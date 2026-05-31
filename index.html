@@ -412,6 +412,83 @@
 
   /* increase touch targets on mobile */
   button, .navlink, .tab, .menuitem { -webkit-tap-highlight-color: transparent; }
+
+  /* ── Splash screen ── */
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #050504;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  #splash.hiding {
+    animation: splashFade 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes splashFade {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  .splash-bg {
+    position: absolute;
+    inset: 0;
+    background: url('1.jpg') center top / cover no-repeat;
+  }
+  .splash-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(5,5,4,0.05) 0%,
+      rgba(5,5,4,0.15) 45%,
+      rgba(5,5,4,0.82) 68%,
+      rgba(5,5,4,0.98) 100%
+    );
+  }
+  .splash-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 0 32px 48px;
+    padding-bottom: calc(48px + env(safe-area-inset-bottom));
+    text-align: center;
+    animation: splashUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
+  }
+  @keyframes splashUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .splash-logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .splash-icon {
+    width: 52px; height: 52px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, oklch(0.78 0.14 158), oklch(0.52 0.14 158));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 800; color: #06231a;
+    box-shadow: 0 10px 28px -6px oklch(0.52 0.14 158 / 0.65), inset 0 1px 0 rgba(255,255,255,0.2);
+    flex-shrink: 0;
+  }
+  .splash-name {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #f5f1ea;
+    line-height: 1.1;
+    font-family: 'Noto Sans Lao', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  .splash-sub {
+    font-size: 12.5px;
+    color: rgba(245,241,234,0.52);
+    margin-top: 8px;
+    line-height: 1.5;
+    font-family: 'Noto Sans Lao', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
 </style>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -419,6 +496,20 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head>
 <body>
+
+<!-- Splash screen -->
+<div id="splash">
+  <div class="splash-bg"></div>
+  <div class="splash-overlay"></div>
+  <div class="splash-content">
+    <div class="splash-logo-wrap">
+      <div class="splash-icon">฿</div>
+      <div class="splash-name">ລາຍຮັບ-ລາຍຈ່າຍ</div>
+    </div>
+    <div class="splash-sub">ບໍລິຫານເງິນສຳລັບລາຍຮັບບໍ່ສະໝ່ຳສະເໝີ</div>
+  </div>
+</div>
+
 <div id="root"></div>
 
 <script type="text/babel" data-presets="env,react">
@@ -2085,6 +2176,17 @@ function ExpenseSheet({ t, defaultCurrency, onClose, onAdd }) {
    Mount
    ============================================================ */
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+// Dismiss splash after app renders
+(function() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  const dismiss = () => {
+    splash.classList.add('hiding');
+    splash.addEventListener('animationend', () => { splash.remove(); }, { once: true });
+  };
+  setTimeout(dismiss, 2200);
+})();
 </script>
 </body>
 </html>
