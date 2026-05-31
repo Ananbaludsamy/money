@@ -236,28 +236,38 @@
   .navlink.active .dot { background: oklch(0.78 0.14 158); }
   .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--text-3); }
 
-  /* mobile tab bar */
+  /* ── Floating pill bottom nav ── */
   .tabbar {
-    background: rgba(14,13,12,0.88);
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    border-top: 1px solid var(--line);
+    background: rgba(20, 18, 16, 0.92);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 26px;
+    box-shadow:
+      0 20px 60px -12px rgba(0,0,0,0.6),
+      0 4px 16px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    padding: 6px;
   }
   .tab {
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    padding: 9px 2px 6px;
-    color: var(--text-2);
-    font-size: 10.5px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 7px 2px 6px;
+    color: var(--text-3);
+    font-size: 10px;
     font-weight: 500;
-    transition: color 0.15s ease;
+    transition: color 0.18s ease, background 0.18s ease;
     flex: 1;
-    min-height: 54px;
+    min-height: 50px;
+    border-radius: 20px;
     -webkit-tap-highlight-color: transparent;
   }
-  .tab svg { width: 20px; height: 20px; }
-  .tab.active { color: var(--text-0); }
+  .tab svg { width: 20px; height: 20px; transition: stroke 0.18s ease; }
+  .tab.active {
+    color: oklch(0.78 0.14 158);
+    background: oklch(0.78 0.14 158 / 0.13);
+  }
   .tab.active svg { stroke: oklch(0.78 0.14 158); }
-  .tab:active { transform: scale(0.94); }
+  .tab:active { transform: scale(0.92); }
 
   /* hide number arrows for currency input */
   .big-amount {
@@ -330,8 +340,8 @@
   .menuitem { padding: 8px 12px; cursor: pointer; color: var(--text-1); font-size: 14px; border-radius: 8px; margin: 2px; }
   .menuitem:hover { background: var(--bg-2); color: var(--text-0); }
 
-  /* main content padding compensating mobile tab bar */
-  .pb-tabsafe { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  /* main content padding compensating floating pill tab bar */
+  .pb-tabsafe { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 
   /* scrollable main content area */
   .screen {
@@ -352,9 +362,13 @@
     border-bottom: 1px solid var(--line);
   }
 
-  /* tab bar absolute inside shell */
+  /* floating pill tab bar */
   .tabbar-shell {
-    position: absolute; bottom: 0; left: 0; right: 0;
+    position: absolute;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 24px);
     z-index: 40;
   }
 
@@ -385,7 +399,7 @@
 
   /* fab */
   .fab {
-    position: absolute; right: 20px; bottom: calc(96px + env(safe-area-inset-bottom));
+    position: absolute; right: 20px; bottom: calc(100px + env(safe-area-inset-bottom));
     width: 56px; height: 56px; border-radius: 999px;
     display: flex; align-items: center; justify-content: center;
     background: linear-gradient(180deg, oklch(0.78 0.14 158), oklch(0.62 0.14 158));
@@ -908,7 +922,7 @@ function App() {
 
 
       {/* Bottom tab bar (always visible, inside shell) */}
-      <nav className="tabbar tabbar-shell flex items-center px-1" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
+      <nav className="tabbar tabbar-shell flex items-center">
         <button onClick={() => setTab('home')} className={'tab ' + (tab==='home'?'active':'')}>
           <I.home width="22" height="22"/><span>{t.nav.home}</span>
         </button>
